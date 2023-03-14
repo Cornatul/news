@@ -3,11 +3,14 @@
 namespace Cornatul\News\Requests;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Saloon\CachePlugin\Contracts\Cacheable;
 use Saloon\CachePlugin\Traits\HasCaching;
 use Saloon\Http\Request;
+use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
+use Saloon\Enums\Method;
 
-class AllNewsRequests extends Request implements Cacheable
+class AllNewsRequest extends Request implements Cacheable
 {
 
     use HasCaching;
@@ -34,7 +37,7 @@ class AllNewsRequests extends Request implements Cacheable
         ];
     }
 
-    public function resolveCacheDriver(): Driver
+    public function resolveCacheDriver(): LaravelCacheDriver
     {
         return new LaravelCacheDriver(Cache::store('file'));
     }

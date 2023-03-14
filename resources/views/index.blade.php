@@ -10,9 +10,36 @@
     <!-- Cards !-->
     <div class="card">
         <div class="card-table table-responsive">
-<h1>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>{{ __('Title') }}</th>
+                    <th>{{ __('Author') }}</th>
+                    <th>{{ __('Date') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($news as $item)
+{{--                    @php--}}
+{{--                    dd($item);--}}
+{{--                    @endphp--}}
 
-</h1>
+                    <tr>
+                        <td>
+                            <a href="#">
+                                {{ $item["title"] }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#">
+                                {{ $item["author"] }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ $item["publishedAt"] }}
+                        </td>
+                    </tr>
+                @endforeach
         </div>
     </div>
 

@@ -10,6 +10,7 @@ use Cornatul\Feeds\Interfaces\FeedRepositoryInterface;
 use Cornatul\Feeds\Jobs\FeedExtractor;
 use Cornatul\Feeds\Jobs\FeedImporter;
 use Cornatul\Feeds\Models\Feed;
+use Cornatul\News\Interfaces\NewsInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -35,9 +36,12 @@ class NewsController extends Controller
     }
 
     //generate a index function
-    public function index(): ViewContract
+    public function index(NewsInterface $news): ViewContract
     {
-        return view('news::index');
+
+        $news = collect($news->headlines('business')->articles);
+
+        return view('news::index', compact('news'));
     }
 
 }
