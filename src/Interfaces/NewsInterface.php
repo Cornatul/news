@@ -1,6 +1,6 @@
 <?php
 
-namespace UnixDevil\NewsBoat\Interfaces;
+namespace Cornatul\News\Interfaces;
 
 
 interface NewsInterface

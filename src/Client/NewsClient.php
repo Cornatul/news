@@ -1,18 +1,14 @@
 <?php
 
-namespace UnixDevil\NewsBoat\Client;
+namespace Cornatul\News\Client;
 
 use GuzzleHttp\ClientInterface;
 use JsonException;
-use UnixDevil\NewsBoat\Interfaces\AllNewsInterface;
-use UnixDevil\NewsBoat\Interfaces\HeadlinesInterface;
-use UnixDevil\NewsBoat\Interfaces\NewsConfigInterface;
-use UnixDevil\NewsBoat\Interfaces\NewsInterface;
-use UnixDevil\NewsBoat\Interfaces\TrendingTermsInterface;
-use UnixDevil\NewsBoat\Manager\NewsConfig;
+use Cornatul\News\Interfaces\NewsInterface;
 
 
-class NewsBoat implements NewsInterface
+
+class NewsClient implements NewsInterface
 {
     private ClientInterface $client;
 
@@ -20,6 +16,7 @@ class NewsBoat implements NewsInterface
     {
         $this->client = $client;
     }
+    //todo replace the array with a proper DTO
 
     public function getNews(string $category , string $country): array
     {

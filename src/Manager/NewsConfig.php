@@ -6,12 +6,12 @@ class NewsConfig
 {
     public static function getNewsEndpoint(): string
     {
-        return Config::get('news-boat.news-endpoint');
+        return Config::get('news.news-endpoint');
     }
 
     public static function getTrendingTermsEndpoint(): string
     {
-        return Config::get('news-boat.trending-terms-endpoint');
+        return Config::get('news.trending-terms-endpoint');
     }
 
 }

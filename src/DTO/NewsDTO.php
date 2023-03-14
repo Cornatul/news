@@ -1,10 +1,11 @@
 <?php
 
-namespace UnixDevil\NewsBoat\DTO;
+namespace Cornatul\News\DTO;
 
 use Spatie\LaravelData\Data;
 
 class NewsDTO extends Data
 {
+    //todo do
 
 }
