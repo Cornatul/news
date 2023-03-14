@@ -6,6 +6,4 @@ use Spatie\LaravelData\Data;
 
 class NewsDTO extends Data
 {
-    //todo do
-
 }
