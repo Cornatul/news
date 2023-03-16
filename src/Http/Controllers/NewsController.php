@@ -35,9 +35,10 @@ class NewsController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(NewsInterface $news): ViewContract
+    public function index(NewsInterface $news, string $topic = "business"): ViewContract
     {
-        $items = $news->headlines('technology');
+        //todo replace this with a slog that will come from the tabs of the navigation
+        $items = $news->headlines($topic);
 
         return view('news::index', compact('items'));
     }
@@ -45,8 +46,6 @@ class NewsController extends Controller
     //generate a function to read the article
     public function show(NewsInterface $news, string $url): ViewContract
     {
-
-        //todo fix this
         $article = $news->extractArticle($url);
 
         return view('news::show', compact('article'));

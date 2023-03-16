@@ -3,13 +3,13 @@
 namespace Cornatul\News\Clients;
 
 use Cornatul\Feeds\Connectors\NlpConnector;
+use Cornatul\Feeds\DTO\ArticleDto;
 use Cornatul\Feeds\Requests\GetArticleRequest;
 use Cornatul\News\Connectors\NewsApiConnector;
 use Cornatul\News\DTO\NewsDTO;
 use Cornatul\News\Interfaces\NewsInterface;
 use Cornatul\News\Requests\AllNewsRequest;
 use Cornatul\News\Requests\HeadlinesRequest;
-use Cornatul\News\Requests\TopHeadlinesRequest;
 use Illuminate\Support\Collection;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\PendingRequestException;
@@ -35,6 +35,7 @@ class NewsApiClient implements NewsInterface
             });
 
             return collect($dataArray);
+
         } catch (GuzzleException|\ReflectionException|InvalidResponseClassException|PendingRequestException $exception) {
 
             logger($exception->getMessage());
@@ -77,13 +78,15 @@ class NewsApiClient implements NewsInterface
      * @throws InvalidResponseClassException
      * @throws PendingRequestException
      */
-    public function extractArticle(string $encodedUrl):Collection
+    public function extractArticle(string $encodedUrl):ArticleDto
     {
         $url = base64_decode($encodedUrl);
 
         $connector = new NlpConnector();
 
-        return  $connector->send(new GetArticleRequest($url))->collect();
+        $response = ($connector->send(new GetArticleRequest($url))->collect());
+
+        return  ArticleDto::from($response->get('data'));
 
     }
 }

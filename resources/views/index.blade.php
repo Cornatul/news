@@ -7,6 +7,11 @@
 @endsection
 
 @section('content')
+
+    <!-- Nav !-->
+    @include('news::partials.nav')
+
+
     <!-- Cards !-->
     <div class="card">
         <div class="card-table table-responsive">
