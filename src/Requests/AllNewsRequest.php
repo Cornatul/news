@@ -4,6 +4,7 @@ namespace Cornatul\News\Requests;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use Saloon\CachePlugin\Contracts\Cacheable;
 use Saloon\CachePlugin\Traits\HasCaching;
 use Saloon\Http\Request;
@@ -31,7 +32,7 @@ class AllNewsRequest extends Request implements Cacheable
         return [
             'q' => $this->topic,
             'sortBy' => 'publishedAt',
-            'apiKey' => 'c29a123962034057aac547e7321be062',
+            'apiKey' => config('news.news-api-key'),
             'language' => 'en',
             'from' => Carbon::now()->subDays(7)->format('Y-m-d'),
         ];

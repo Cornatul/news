@@ -7,14 +7,12 @@ use Spatie\LaravelData\Data;
 
 class NewsDTO extends Data
 {
-    #[MapInputName('articles')]
-    public array $articles;
+    public string  $author;
 
-    public string $author;
+    public array $source;
+
     public string $title;
-    public string $description;
+
     public string $url;
-    public string $urlToImage;
     public string $publishedAt;
-    public string $content;
 }

@@ -1,7 +1,5 @@
 <?php
 
 return [
-    'news-endpoint' => env('NEWS_API_ENDPOINT'),
-    'search-news-endpoint' => env('SEARCH_NEWS_ENDPOINT'),
-    'trending-terms-endpoint' => env('TRENDING_TERMS_ENDPOINT'),
+    'news-api-key' => env('NEWS_API_KEY', 'c29a123962034057aac547e7321be062'),
 ];

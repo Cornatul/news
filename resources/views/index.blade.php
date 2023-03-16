@@ -16,28 +16,30 @@
                     <th>{{ __('Title') }}</th>
                     <th>{{ __('Author') }}</th>
                     <th>{{ __('Date') }}</th>
+                    <th>{{ __('Actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($news as $item)
-{{--                    @php--}}
-{{--                    dd($item);--}}
-{{--                    @endphp--}}
+                @foreach($items as $item)
 
                     <tr>
                         <td>
-                            <a href="#">
-                                {{ $item["title"] }}
+                            <a href="{{ $item->url }}" target="_blank">
+                                {{ $item->title }}
                             </a>
                         </td>
                         <td>
                             <a href="#">
-                                {{ $item["author"] }}
+                                {{ $item->author }}
                             </a>
                         </td>
                         <td>
-                            {{ $item["publishedAt"] }}
+                            {{ $item->publishedAt }}
                         </td>
+                        <td>
+                            <a href="{{ route('news.show', ['url' => base64_encode($item->url)]) }}">
+                                {{ __('Extract') }}
+                            </a>
                     </tr>
                 @endforeach
         </div>

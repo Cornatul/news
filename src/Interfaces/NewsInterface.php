@@ -4,6 +4,7 @@ namespace Cornatul\News\Interfaces;
 
 
 use Cornatul\News\DTO\NewsDTO;
+use Illuminate\Support\Collection;
 
 interface NewsInterface
 {
@@ -15,10 +16,13 @@ interface NewsInterface
      * hu, id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
      * th, tr, tw, ua, us, ve, za
      * @param string $topic
-     * @return NewsDTO
+     * @return Collection
      */
-    public function allNews(string $topic):NewsDTO;
+    public function allNews(string $topic):Collection;
 
-    public function headlines(string $topic):NewsDTO;
+    public function headlines(string $topic):Collection;
+
+    public function extractArticle(string $encodedUrl):Collection;
+
 
 }

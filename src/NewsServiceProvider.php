@@ -12,11 +12,23 @@ class NewsServiceProvider extends ServiceProvider
 {
     final public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__.'/../routes/news.php');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'news');
-        $this->publishes([
-            __DIR__ . '/Config/news.php' => config_path('news.php'),
-        ]);
+
+        if ($this->app->runningInConsole()) {
+
+            $this->publishes([
+                __DIR__.'/Config/news.php' => config_path('news.php'),
+            ], 'news');
+
+        }
+
+        $this->loadRoutesFrom(__DIR__ . '/../routes/news.php');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'news');
+
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/Config/news.php', 'news'
+        );
     }
 
     final public function register(): void

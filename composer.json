@@ -7,7 +7,7 @@
         {
             "role": "Developer",
             "name": "Stefan I",
-            "email": "Stefan@unxidevil.com",
+            "email": "Stefan@Cornatul.com",
             "homepage": "https://cornatul.com/"
         }
     ],
@@ -23,6 +23,7 @@
     },
     "require": {
         "php": "^8.1",
+        "cornatul/feeds": "dev-master",
         "guzzlehttp/guzzle": ">=7.5.0",
         "illuminate/support": ">=9.0.0",
         "spatie/laravel-data": ">=3.0.0"

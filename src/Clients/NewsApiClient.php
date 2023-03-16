@@ -2,11 +2,15 @@
 
 namespace Cornatul\News\Clients;
 
+use Cornatul\Feeds\Connectors\NlpConnector;
+use Cornatul\Feeds\Requests\GetArticleRequest;
 use Cornatul\News\Connectors\NewsApiConnector;
 use Cornatul\News\DTO\NewsDTO;
 use Cornatul\News\Interfaces\NewsInterface;
 use Cornatul\News\Requests\AllNewsRequest;
+use Cornatul\News\Requests\HeadlinesRequest;
 use Cornatul\News\Requests\TopHeadlinesRequest;
+use Illuminate\Support\Collection;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\PendingRequestException;
 
@@ -16,7 +20,7 @@ class NewsApiClient implements NewsInterface
     /**
      * @method find
      */
-    public function allNews(string $topic): NewsDTO
+    public function allNews(string $topic): Collection
     {
         $dataArray = [];
 
@@ -26,20 +30,22 @@ class NewsApiClient implements NewsInterface
 
             $response = $newsApiConnector->send(new AllNewsRequest($topic));
 
+            $response->collect('articles')->each(function ($article) use (&$dataArray) {
+                $dataArray[] = NewsDTO::from($article);
+            });
 
-            return NewsDTO::from($response->json());
-
+            return collect($dataArray);
         } catch (GuzzleException|\ReflectionException|InvalidResponseClassException|PendingRequestException $exception) {
 
             logger($exception->getMessage());
         }
 
-        return NewsDTO::from($dataArray);
+        return collect(NewsDTO::from($dataArray));
 
     }
 
     //generate the headlines request
-    public function headlines(string $topic): NewsDTO
+    public function headlines(string $topic): Collection
     {
         $dataArray = [];
 
@@ -47,16 +53,37 @@ class NewsApiClient implements NewsInterface
 
             $newsApiConnector = new NewsApiConnector();
 
-            $response = $newsApiConnector->send(new TopHeadlinesRequest($topic));
+            $response = $newsApiConnector->send(new HeadlinesRequest($topic));
 
-            return NewsDTO::from($response->json());
+            $response->collect('articles')->each(function ($article) use (&$dataArray) {
+                $dataArray[] = NewsDTO::from($article);
+            });
+
+            return collect($dataArray);
 
         } catch (GuzzleException|\ReflectionException|InvalidResponseClassException|PendingRequestException $exception) {
 
             logger($exception->getMessage());
+
         }
 
-        return NewsDTO::from($dataArray);
+        return collect(NewsDTO::from($dataArray));
+
+    }
+
+
+    /**
+     * @throws \ReflectionException
+     * @throws InvalidResponseClassException
+     * @throws PendingRequestException
+     */
+    public function extractArticle(string $encodedUrl):Collection
+    {
+        $url = base64_decode($encodedUrl);
+
+        $connector = new NlpConnector();
+
+        return  $connector->send(new GetArticleRequest($url))->collect();
 
     }
 }

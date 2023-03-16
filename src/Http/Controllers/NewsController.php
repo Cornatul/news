@@ -35,13 +35,22 @@ class NewsController extends Controller
         $this->middleware('auth');
     }
 
-    //generate a index function
     public function index(NewsInterface $news): ViewContract
     {
+        $items = $news->headlines('technology');
 
-        $news = collect($news->headlines('business')->articles);
+        return view('news::index', compact('items'));
+    }
 
-        return view('news::index', compact('news'));
+    //generate a function to read the article
+    public function show(NewsInterface $news, string $url): ViewContract
+    {
+
+        //todo fix this
+        $article = $news->extractArticle($url);
+
+        return view('news::show', compact('article'));
+
     }
 
 }

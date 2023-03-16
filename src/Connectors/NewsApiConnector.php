@@ -2,6 +2,7 @@
 
 namespace Cornatul\News\Connectors;
 
+use Illuminate\Support\Facades\Config;
 use Saloon\Http\Connector;
 
 class NewsApiConnector extends Connector
@@ -22,8 +23,9 @@ class NewsApiConnector extends Connector
     protected function defaultQuery(): array
     {
         return [
-            'apiKey' => 'c29a123962034057aac547e7321be062',
+            'apiKey' => config('news.news-api-key'),
             'sortBy' => 'publishedAt',
         ];
+
     }
 }

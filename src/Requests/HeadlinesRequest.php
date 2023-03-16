@@ -2,6 +2,17 @@
 
 namespace Cornatul\News\Requests;
 
+/**
+ *
+ * @author Firstname Lastname <https://github.com/cornatul>
+ * @package Cornatul\News
+ * @license MIT
+ * @link https://github.com/cornatul/news#
+ * @since 1.0.0
+ * @version 1.0.2
+ * @copyright Copyright (c) 2020, Stefan Corn
+ * @todo Rename this to HeadlinesRequest
+ */
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Saloon\CachePlugin\Contracts\Cacheable;
@@ -10,7 +21,7 @@ use Saloon\Http\Request;
 use Saloon\Enums\Method;
 use Saloon\CachePlugin\Contracts\Driver;
 use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
-class TopHeadlinesRequest extends Request implements Cacheable
+class HeadlinesRequest extends Request implements Cacheable
 {
 
     use HasCaching;
@@ -33,9 +44,10 @@ class TopHeadlinesRequest extends Request implements Cacheable
     protected function defaultQuery(): array
     {
         return [
+            'sortBy' => 'publishedAt',
             'category' => $this->category,
             'country' => 'gb',
-            'apiKey' => 'c29a123962034057aac547e7321be062',
+            'apiKey' => config('news.news-api-key'),
         ];
     }
 
