@@ -24,51 +24,21 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\View\View as ViewContract;
 use imelgrat\OPML_Parser\OPML_Parser;
-class NewsController extends Controller
+class NewsApiController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
+    use  DispatchesJobs, ValidatesRequests;
 
     private TrendingInterface $trending;
 
     public function __construct(TrendingInterface $trending)
     {
-        $this->middleware('auth');
         $this->trending = $trending;
     }
 
-    public function index(NewsInterface $news, string $topic = "business"): ViewContract
+
+    public function googleNews()
     {
-        $news_api = $news->headlines($topic);
-
-        $google_news = $this->trending->find($topic);
-
-        $trending = ($this->trending->getTrendingKeywords())->first();
-
-//        dd($google_news);
-
-        return view('news::index', compact('news_api', 'google_news', 'trending','topic'));
+        $google_news = $this->trending->find('business');
+        return response()->json($google_news);
     }
-
-    public function topic(NewsInterface $news, string $topic = "business"): ViewContract
-    {
-        $news_api = $news->allNews($topic);
-
-        $google_news = $this->trending->find($topic);
-
-        $trending = ($this->trending->getTrendingKeywords())->first();
-
-
-
-        return view('news::index', compact('news_api', 'google_news', 'trending','topic'));
-    }
-
-    public function show(NewsInterface $news, string $url): ViewContract
-    {
-        $article = $news->extractArticle($url);
-
-        return view('news::show', compact('article'));
-
-    }
-
 }

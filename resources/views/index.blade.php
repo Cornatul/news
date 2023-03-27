@@ -46,7 +46,7 @@
                 <h3>
                     <a class="btn btn-link" data-toggle="collapse" data-target="#collapseSecond" aria-expanded="true"
                        aria-controls="collapseSecond">
-                        NewsApi.org - {{ $topic }} news
+                        NewsApi.org - {{ Str::camel($topic) }} news
                     </a>
                 </h3>
             </div>
@@ -98,7 +98,7 @@
                 <h3>
                     <a class="btn btn-link" data-toggle="collapse" data-target="#collapseThird" aria-expanded="true"
                        aria-controls="collapseThird">
-                        Google News - {{ $topic }} news
+                        Google News - {{ ($topic) }} news
                     </a>
                 </h3>
             </div>

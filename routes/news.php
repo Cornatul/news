@@ -10,4 +10,8 @@ Route::group(['middleware' => ['web','auth'],'prefix' => 'news', 'as' => 'news.'
 
     Route::get('/show/{url}', [NewsController::class, 'show'])->name('show');
 
+    //generate the route for googleNews
+
+
 });
+
