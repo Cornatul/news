@@ -1,7 +1,7 @@
 <?php
 
-namespace UnixDevil\NewsBoat\Tests;
-use UnixDevil\NewsBoat\NewsBoatServiceProvider;
+namespace Cornatul\News\Tests;
+use Cornatul\News\NewsServiceProvider;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 class TestCase extends OrchestraTestCase
 {
@@ -14,7 +14,7 @@ class TestCase extends OrchestraTestCase
     final protected function getPackageProviders($app)
     {
         return [
-            NewsBoatServiceProvider::class,
+            NewsServiceProvider::class,
         ];
     }
 

@@ -1,31 +1,33 @@
 {
-    "name": "unixdevil/newsboat",
-    "description": "A set of tools to find news that are trending ",
+    "name": "cornatul/news",
+    "description": "A set of tools to find news that are trending across multiple sources. ",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "role": "Developer",
             "name": "Stefan I",
-            "email": "Stefan@unxidevil.com",
-            "homepage": "https://unixdevil.com/"
+            "email": "Stefan@Cornatul.com",
+            "homepage": "https://cornatul.com/"
         }
     ],
     "autoload": {
         "psr-4": {
-            "UnixDevil\\NewsBoat\\": "src/"
+            "Cornatul\\News\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "UnixDevil\\NewsBoat\\Tests\\": "tests/"
+            "Cornatul\\News\\Tests\\": "tests/"
         }
     },
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": ">=7.5.0",
         "illuminate/support": ">=9.0.0",
-        "spatie/laravel-data": ">=3.0.0"
+        "spatie/laravel-data": ">=3.0.0",
+        "sammyjo20/saloon-cache-plugin": "^2.0",
+        "sammyjo20/saloon-laravel": "^2.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
@@ -33,7 +35,7 @@
         "phpunit/phpunit": "^9.5"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
+    "prefer-stable": false,
     "config": {
         "sort-packages": true,
         "preferred-install": "dist",
@@ -42,7 +44,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "UnixDevil\\FeedBoat\\Providers\\FeedBoatServiceProvider"
+                "Cornatul\\News\\NewsServiceProvider"
             ]
         }
     }

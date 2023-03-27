@@ -1,44 +1,77 @@
 <?php
 
-namespace UnixDevil\NewsBoat\Tests\Unit;
+namespace Cornatul\News\Tests\Unit;
 
-use GuzzleHttp\ClientInterface;
+use App\Models\User;
+use Cornatul\Feeds\Clients\FeedlyClient;
+use Cornatul\Feeds\DTO\FeedDto;
+use Cornatul\Feeds\Repositories\Interfaces\ArticleRepositoryInterface;
+use Cornatul\Feeds\Interfaces\FeedFinderInterface;
+use Cornatul\Feeds\Models\Article;
+use Cornatul\Feeds\Models\Feed;
+use Cornatul\Feeds\Repositories\Interfaces\FeedRepositoryInterface;
+use Cornatul\News\DTO\NewsDTO;
+use Cornatul\News\Interfaces\NewsInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Mockery;
 
-use UnixDevil\NewsBoat\Client\NewsBoat;
-use UnixDevil\NewsBoat\Interfaces\NewsInterface;
 
-class NewsTest extends \UnixDevil\NewsBoat\Tests\TestCase
+class NewsTest extends \Cornatul\News\Tests\TestCase
 {
 
-    /**
-     * @throws \JsonException
-     */
-    public function testGetNews()
+
+    public function test_news_headlines(): void
     {
-       $mock = $this->getMockBuilder(NewsBoat::class)
-            ->setConstructorArgs([Mockery::mock(ClientInterface::class)])
-            ->getMock();
-        $mock
-            ->method('getNews')
-            ->with('business', 'us')
-            ->willReturn(['articles' => []]);
-        $this->assertInstanceOf(NewsInterface::class, $mock);
-        $this->assertIsArray($mock->getNews('business', 'us'));
+        //generate a test for the news interface
+
+        $news = Mockery::mock()->makePartial('Cornatul\News\Interfaces\NewsInterface');
+
+        $news->expects('headlines')->andReturns(new NewsDTO());
+
+        $this->assertInstanceOf(NewsDTO::class, $news->headlines('business'));
+    }
+
+    public function test_can_get_all_news():void
+    {
+        $news = Mockery::mock()->makePartial('Cornatul\News\Interfaces\NewsInterface');
+        $news->expects('allNews')->andReturns(new NewsDTO());
+        $this->assertInstanceOf(NewsDTO::class, $news->allNews('business'));
+    }
+
+
+    public function test_can_get_keywords()
+    {
+        $news = Mockery::mock()->makePartial('Cornatul\News\Interfaces\TrendingInterface');
+        $news->expects('getTrendingKeywords')
+            ->times(3)
+            ->andReturn(new Collection([1,2,3,4,5]));
+        $this->assertInstanceOf(Collection::class, $news->getTrendingKeywords());
+        //implement even a check for the collection to be of length 5
+        $this->assertCount(5, $news->getTrendingKeywords());
+        $this->assertContains(1, $news->getTrendingKeywords());
 
     }
 
 
-    public function testGetTrendingTerms()
+    public function test_can_get_google_news()
     {
-            $mock = $this->getMockBuilder(NewsBoat::class)
-            ->setConstructorArgs([Mockery::mock(ClientInterface::class)])
-            ->getMock();
-        $mock
-            ->method('getTrendingTerms')
-            ->willReturn(['articles' => []]);
-        $this->assertInstanceOf(NewsInterface::class, $mock);
-        $this->assertIsArray($mock->getTrendingTerms()); }
+        $news = Mockery::mock()->makePartial('Cornatul\News\Interfaces\TrendingInterface');
 
+        $news->expects('find')
+            ->with('business')
+            ->times(3)
+            ->andReturns(new Collection([
+                "keyword" => "business",
+                "response" => []
+            ]));
+        $this->assertInstanceOf(Collection::class, $news->find('business'));
+        $this->assertContains('business', $news->find('business'));
+        $this->assertArrayHasKey('keyword', $news->find('business')->toArray());
+
+    }
 
 }
