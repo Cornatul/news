@@ -6,6 +6,7 @@ Route::group(['middleware' => ['web','auth'],'prefix' => 'news', 'as' => 'news.'
 
     //generate a route for the news contraoller
     Route::get('/{topic?}', [NewsController::class, 'index'])->name('index');
+    Route::get('/topic/{topic}', [NewsController::class, 'topic'])->name('topic');
 
     Route::get('/show/{url}', [NewsController::class, 'show'])->name('show');
 

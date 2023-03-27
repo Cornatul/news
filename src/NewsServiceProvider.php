@@ -3,6 +3,8 @@
 namespace Cornatul\News;
 
 use Cornatul\News\Clients\NewsApiClient;
+use Cornatul\News\Clients\TrendingClient;
+use Cornatul\News\Interfaces\TrendingInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\ServiceProvider;
@@ -35,5 +37,6 @@ class NewsServiceProvider extends ServiceProvider
     {
         $this->app->bind(ClientInterface::class, Client::class);
         $this->app->bind(NewsInterface::class, NewsApiClient::class);
+        $this->app->bind(TrendingInterface::class, TrendingClient::class);
     }
 }

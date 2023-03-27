@@ -16,4 +16,8 @@ class NewsDTO extends Data
     public string $url;
 
     public string $publishedAt;
+
+    public ?string $urlToImage;
+
+
 }

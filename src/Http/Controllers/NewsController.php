@@ -11,6 +11,7 @@ use Cornatul\Feeds\Jobs\FeedExtractor;
 use Cornatul\Feeds\Jobs\FeedImporter;
 use Cornatul\Feeds\Models\Feed;
 use Cornatul\News\Interfaces\NewsInterface;
+use Cornatul\News\Interfaces\TrendingInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -30,20 +31,32 @@ class NewsController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function __construct()
+
+    private TrendingInterface $trending;
+
+    public function __construct(TrendingInterface $trending)
     {
         $this->middleware('auth');
+        $this->trending = $trending;
     }
 
     public function index(NewsInterface $news, string $topic = "business"): ViewContract
     {
-        //todo replace this with a slog that will come from the tabs of the navigation
         $items = $news->headlines($topic);
 
-        return view('news::index', compact('items'));
+        $trending = ($this->trending->getTrendingKeywords())->first();
+
+
+        return view('news::index', compact('items', 'trending','topic'));
     }
 
-    //generate a function to read the article
+    public function topic(NewsInterface $news, string $topic = "business"): ViewContract
+    {
+        $items = $news->allNews($topic);
+
+        return view('news::index', compact('items', 'topic'));
+    }
+
     public function show(NewsInterface $news, string $url): ViewContract
     {
         $article = $news->extractArticle($url);

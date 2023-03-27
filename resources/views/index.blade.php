@@ -11,10 +11,38 @@
     <!-- Nav !-->
     @include('news::partials.nav')
 
+    @if(@$trending)
+   <div class="card">
+       <div class="card-header">
+           <h3>
+               Trending Terms
+           </h3>
+       </div>
+       <div class="card-table table-responsive">
+           <ul>
+               @foreach($trending as $keyword)
+                   <li>
+                       <h6>
+                           <a href="{{ route('news.topic', ['topic' => $keyword]) }}">
+                               {{ $keyword }}
+                           </a>
+                       </h6>
+                   </li>
+               @endforeach
+           </ul>
+       </div>
+   </div>
+    @endif
 
-    <!-- Cards !-->
+    <!-- News !-->
     <div class="card">
+        <div class="card-header">
+            <h3>
+                {{ Str::camel($topic) }} news
+            </h3>
+        </div>
         <div class="card-table table-responsive">
+
             <table class="table table-hover">
                 <thead>
                 <tr>

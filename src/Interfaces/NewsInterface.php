@@ -4,6 +4,7 @@ namespace Cornatul\News\Interfaces;
 
 
 use Cornatul\Feeds\DTO\ArticleDto;
+use Cornatul\News\DTO\NewsArticleDto;
 use Cornatul\News\DTO\NewsDTO;
 use Illuminate\Support\Collection;
 
@@ -23,7 +24,7 @@ interface NewsInterface
 
     public function headlines(string $topic):Collection;
 
-    public function extractArticle(string $encodedUrl):ArticleDto;
+    public function extractArticle(string $encodedUrl):NewsArticleDto;
 
 
 }
