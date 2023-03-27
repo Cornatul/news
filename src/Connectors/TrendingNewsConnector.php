@@ -5,7 +5,7 @@ namespace Cornatul\News\Connectors;
 use Illuminate\Support\Facades\Config;
 use Saloon\Http\Connector;
 
-class TrendingKeywordsConnector extends Connector
+class TrendingNewsConnector extends Connector
 {
     public function resolveBaseUrl(): string
     {
@@ -24,7 +24,6 @@ class TrendingKeywordsConnector extends Connector
     {
         return [
             'apiKey' => config('news.news-api-key'),
-            'sortBy' => 'publishedAt',
         ];
 
     }

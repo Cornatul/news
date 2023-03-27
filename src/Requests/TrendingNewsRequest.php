@@ -7,40 +7,52 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Saloon\CachePlugin\Contracts\Cacheable;
 use Saloon\CachePlugin\Traits\HasCaching;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Http\Request;
 use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
 use Saloon\Enums\Method;
+use Saloon\CachePlugin\Contracts\Driver;
+use Saloon\Traits\Body\HasJsonBody;
 
-class TrendingKeywordsRequest extends Request implements Cacheable
+class TrendingNewsRequest extends Request implements Cacheable, HasBody
 {
 
     use HasCaching;
 
-    protected Method $method = Method::GET;
+    use HasJsonBody;
+
+    protected Method $method = Method::POST;
+    public function __construct(
+        protected string $keyword,
+    ){}
+
 
 
     public function resolveEndpoint(): string
     {
-        return '/trending-terms';
+        return '/google-news';
     }
 
-    protected function defaultQuery(): array
+    protected function defaultBody(): array
     {
-        return [];
+        return [
+            'keyword' => $this->keyword,
+            'language' => 'en',
+        ];
     }
 
-    public function resolveCacheDriver(): LaravelCacheDriver
+    public function resolveCacheDriver(): Driver
     {
         return new LaravelCacheDriver(Cache::store('file'));
     }
 
     public function cacheExpiryInSeconds(): int
     {
-        return 3600; // One Hour
+        return 10; // One Hour
     }
 
     protected function getCacheableMethods(): array
     {
-        return [Method::GET];
+        return [Method::GET, Method::POST];
     }
 }

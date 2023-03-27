@@ -15,6 +15,7 @@ use Cornatul\News\Interfaces\NewsInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 
@@ -39,6 +40,38 @@ class NewsTest extends \Cornatul\News\Tests\TestCase
         $news = Mockery::mock()->makePartial('Cornatul\News\Interfaces\NewsInterface');
         $news->expects('allNews')->andReturns(new NewsDTO());
         $this->assertInstanceOf(NewsDTO::class, $news->allNews('business'));
+    }
+
+
+    public function test_can_get_keywords()
+    {
+        $news = Mockery::mock()->makePartial('Cornatul\News\Interfaces\TrendingInterface');
+        $news->expects('getTrendingKeywords')
+            ->times(3)
+            ->andReturn(new Collection([1,2,3,4,5]));
+        $this->assertInstanceOf(Collection::class, $news->getTrendingKeywords());
+        //implement even a check for the collection to be of length 5
+        $this->assertCount(5, $news->getTrendingKeywords());
+        $this->assertContains(1, $news->getTrendingKeywords());
+
+    }
+
+
+    public function test_can_get_google_news()
+    {
+        $news = Mockery::mock()->makePartial('Cornatul\News\Interfaces\TrendingInterface');
+
+        $news->expects('find')
+            ->with('business')
+            ->times(3)
+            ->andReturns(new Collection([
+                "keyword" => "business",
+                "response" => []
+            ]));
+        $this->assertInstanceOf(Collection::class, $news->find('business'));
+        $this->assertContains('business', $news->find('business'));
+        $this->assertArrayHasKey('keyword', $news->find('business')->toArray());
+
     }
 
 }

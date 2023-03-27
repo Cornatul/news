@@ -4,9 +4,7 @@ namespace Cornatul\News\Http\Controllers;
 
 use Cornatul\Feeds\Classes\Parser;
 use Cornatul\Feeds\DTO\FeedDto;
-use Cornatul\Feeds\Interfaces\ArticleRepositoryInterface;
 use Cornatul\Feeds\Interfaces\FeedFinderInterface;
-use Cornatul\Feeds\Interfaces\FeedRepositoryInterface;
 use Cornatul\Feeds\Jobs\FeedExtractor;
 use Cornatul\Feeds\Jobs\FeedImporter;
 use Cornatul\Feeds\Models\Feed;
@@ -24,7 +22,6 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
 use Illuminate\Contracts\View\View as ViewContract;
 use imelgrat\OPML_Parser\OPML_Parser;
 class NewsController extends Controller
@@ -42,19 +39,29 @@ class NewsController extends Controller
 
     public function index(NewsInterface $news, string $topic = "business"): ViewContract
     {
-        $items = $news->headlines($topic);
+        $news_api = $news->headlines($topic);
+
+        $google_news = $this->trending->find($topic);
 
         $trending = ($this->trending->getTrendingKeywords())->first();
 
+//        dd($google_news);
 
-        return view('news::index', compact('items', 'trending','topic'));
+        return view('news::index', compact('news_api', 'google_news', 'trending','topic'));
     }
 
     public function topic(NewsInterface $news, string $topic = "business"): ViewContract
     {
-        $items = $news->allNews($topic);
+        $news_api = $news->allNews($topic);
 
-        return view('news::index', compact('items', 'topic'));
+        $google_news = $this->trending->find($topic);
+
+        $trending = ($this->trending->getTrendingKeywords())->first();
+
+
+
+
+        return view('news::index', compact('news_api', 'google_news', 'trending','topic'));
     }
 
     public function show(NewsInterface $news, string $url): ViewContract
