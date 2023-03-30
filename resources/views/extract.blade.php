@@ -13,9 +13,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
     <div class="card">
         <div class="card-table table-responsive p-5">
+
+            <!-- Button trigger modal -->
+
+            <img src="{{ $article->banner }}" width="100%" alt="">
+
+            <br>
+            <br>
+            <br>
+
             <button id="copy" class="btn btn-primary" data-clipboard-target="#editor">
-                <i class="fa fa-clipboard"></i>
+                <i class="fa fa-robot"></i>
+                Copy to OpenAI
             </button>
+
+
+            <br>
+            <br>
+            <br>
+
 
             <form method="POST" action="{{ route('feeds.article.update', [$article->id]) }}">
                 @csrf
@@ -25,13 +41,21 @@
                 </div>
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea id="editor" class="form-control"  name="markdown"  style="height: 100vh"  rows="3">{{ $article->text }}</textarea>
+                    <textarea id="editor" class="form-control"  name="markdown"  style="height: 100vh"  rows="3">{{ $article->markdown }}</textarea>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Submit</button>
 
                 </div>
             </form>
+            <div id="gridDemo" class="col">
+
+                @foreach($article->images as $item)
+                    <div class="grid-square">
+                        <img width="125px" src="{{ $item }}" alt="">
+                    </div>
+                @endforeach
+            </div>
 
         </div>
     </div>
@@ -40,6 +64,8 @@
 
     <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
     <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
     <script>
         const easyMDE = new EasyMDE({element: document.getElementById('editor')});
         const copy = new ClipboardJS('#copy');
@@ -47,10 +73,14 @@
             console.info('Action:', e.action);
             console.info('Text:', e.text);
             console.info('Trigger:', e.trigger);
+
+
         });
-        copy.on('error', function(e) {
-            console.error('Action:', e.action);
-            console.error('Trigger:', e.trigger);
+        // Grid demo
+        gridDemo = document.getElementById('gridDemo');
+        new Sortable(gridDemo, {
+            animation: 150,
+            ghostClass: 'blue-background-class'
         });
     </script>
 @endsection

@@ -14,10 +14,8 @@ use Saloon\Enums\Method;
 use Saloon\CachePlugin\Contracts\Driver;
 use Saloon\Traits\Body\HasJsonBody;
 
-class TrendingNewsRequest extends Request implements Cacheable, HasBody
+class TrendingNewsRequest extends Request implements  HasBody
 {
-
-    use HasCaching;
 
     use HasJsonBody;
 
@@ -39,20 +37,5 @@ class TrendingNewsRequest extends Request implements Cacheable, HasBody
             'keyword' => $this->keyword,
             'language' => 'en',
         ];
-    }
-
-    public function resolveCacheDriver(): Driver
-    {
-        return new LaravelCacheDriver(Cache::store('file'));
-    }
-
-    public function cacheExpiryInSeconds(): int
-    {
-        return 10; // One Hour
-    }
-
-    protected function getCacheableMethods(): array
-    {
-        return [Method::GET, Method::POST];
     }
 }

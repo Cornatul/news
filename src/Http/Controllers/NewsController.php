@@ -29,45 +29,48 @@ class NewsController extends Controller
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
-    private TrendingInterface $trending;
-
-    public function __construct(TrendingInterface $trending)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->trending = $trending;
     }
 
-    public function index(NewsInterface $news, string $topic = "business"): ViewContract
+    public function index(NewsInterface $news, TrendingInterface $trending, string $topic = "business"): ViewContract
     {
         $news_api = $news->headlines($topic);
 
-        $google_news = $this->trending->find($topic);
+        $google_news = $trending->find($topic);
 
-        $trending = ($this->trending->getTrendingKeywords())->first();
 
-//        dd($google_news);
-
-        return view('news::index', compact('news_api', 'google_news', 'trending','topic'));
+        return view('news::index', compact('news_api', 'google_news','topic'));
     }
 
-    public function topic(NewsInterface $news, string $topic = "business"): ViewContract
+    public function topic(NewsInterface $news, TrendingInterface $trending,string $topic = "business"): ViewContract
     {
         $news_api = $news->allNews($topic);
 
-        $google_news = $this->trending->find($topic);
-
-        $trending = ($this->trending->getTrendingKeywords())->first();
+        $google_news = $trending->find($topic);
 
 
-
-        return view('news::index', compact('news_api', 'google_news', 'trending','topic'));
+        return view('news::index', compact('news_api', 'google_news','topic'));
     }
 
-    public function show(NewsInterface $news, string $url): ViewContract
+
+    public function extract(NewsInterface $news, string $url): ViewContract
     {
         $article = $news->extractArticle($url);
 
-        return view('news::show', compact('article'));
+        return view('news::extract', compact('article'));
+
+    }
+
+
+    public function trending(NewsInterface $news, TrendingInterface $trending): ViewContract
+    {
+        $google = $trending->getGGoogleTrendingKeywords();
+        $newspapers = $trending->getNewsTrendingKeywords();
+        $twitter = $trending->getTwitterTrendingKeywords();
+
+        return view('news::trending', compact('google', 'newspapers', 'twitter'));
 
     }
 

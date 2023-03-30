@@ -16,6 +16,7 @@ use Cornatul\News\Requests\AllNewsRequest;
 use Cornatul\News\Requests\HeadlinesRequest;
 use Cornatul\News\Requests\TrendingKeywordsRequest;
 use Cornatul\News\Requests\TrendingNewsRequest;
+use Cornatul\Social\DTO\TwitterTrendingDTO;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Saloon\Exceptions\InvalidResponseClassException;
@@ -30,51 +31,91 @@ class TrendingClient implements TrendingInterface
      */
     public function find(string $topic): Collection
     {
+        try{
 
-        $key = $topic;
-
-        $data = Cache::get($key);
-
-        if(!$data)
-        {
             $newsApiConnector = new TrendingNewsConnector();
 
             $response = $newsApiConnector->send(new TrendingNewsRequest($topic));
 
-            $data =  collect($response->collect('data')->toArray()["response"]);
+            $response = $response->getPsrResponse()->getBody()->getContents();
 
-            Cache::put($key, $data, $minutes = 60); // cache for 60 minutes
+            $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+
+
+
+            return collect($response["data"]['response']);
+
+        }catch (\Exception $exception) {
+
+            logger()->error($exception->getMessage());
+
+            return collect([]);
 
         }
 
-        return $data;
     }
 
     /**
      * @throws InvalidResponseClassException
      * @throws \ReflectionException
      * @throws PendingRequestException
+     * @throws \JsonException
      */
-    public function getTrendingKeywords(): Collection
+    public function getNewsTrendingKeywords(): Collection
     {
 
-        $key = "trendingKeywords";
+        $newsApiConnector = new TrendingKeywordsConnector();
 
-        $data = Cache::get($key);
+        $response = $newsApiConnector->send(new TrendingKeywordsRequest());
 
-        if (!$data){
-            $newsApiConnector = new TrendingKeywordsConnector();
+        $response = $response->getPsrResponse()->getBody()->getContents();
 
-            $response = $newsApiConnector->send(new TrendingKeywordsRequest());
+        $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
-            $response->collect('data')->each(function ($keyword) use (&$dataArray) {
-                $dataArray[] = $keyword;
-            });
+        $response = collect($response["data"]);
 
-            $data =  collect($dataArray);
-
-            Cache::put($key, $data, $minutes = 60); // cache for 60 minutes
-        }
-        return $data;
+        return collect($response->get("newspaper"));
     }
+
+    /**
+     * @throws InvalidResponseClassException
+     * @throws \ReflectionException
+     * @throws PendingRequestException
+     * @throws \JsonException
+     */
+    public function getGGoogleTrendingKeywords(): Collection
+    {
+        $newsApiConnector = new TrendingKeywordsConnector();
+
+        $response = $newsApiConnector->send(new TrendingKeywordsRequest());
+
+        $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+
+        $response = collect($response["data"]);
+
+        return collect($response->get("google"));
+    }
+
+    /**
+     * @throws InvalidResponseClassException
+     * @throws \ReflectionException
+     * @throws PendingRequestException
+     * @throws \JsonException
+     */
+    public function getTwitterTrendingKeywords(): Collection
+    {
+        $newsApiConnector = new TrendingKeywordsConnector();
+
+        $response = $newsApiConnector->send(new TrendingKeywordsRequest());
+
+        $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+
+        $response = collect($response["data"]["twitter"]);
+
+        return collect($response->first()["trends"])->each(function ($item) {
+           return TwitterTrendingDTO::from($item);
+        });
+    }
+
+
 }

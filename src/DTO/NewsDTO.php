@@ -11,7 +11,7 @@ class NewsDTO extends Data
 
     public array $source;
 
-    public string $title;
+    public ?string $title;
 
     public string $url;
 

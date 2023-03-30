@@ -6,14 +6,14 @@ use Illuminate\Support\Collection;
 
 interface TrendingInterface
 {
-
-    /**
-     * @method find
-     */
     public function find(string $topic): Collection;
 
     /**
      * @method getTrendingKeywords
      */
-    public function getTrendingKeywords(): Collection;
+    public function getNewsTrendingKeywords(): Collection;
+
+    public function getGGoogleTrendingKeywords(): Collection;
+
+    public function getTwitterTrendingKeywords(): Collection;
 }
