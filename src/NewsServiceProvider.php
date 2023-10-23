@@ -27,10 +27,6 @@ class NewsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'news');
 
-
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/news.php', 'news'
-        );
     }
 
     final public function register(): void
@@ -38,5 +34,7 @@ class NewsServiceProvider extends ServiceProvider
         $this->app->bind(ClientInterface::class, Client::class);
         $this->app->bind(NewsInterface::class, NewsApiClient::class);
         $this->app->bind(TrendingInterface::class, TrendingClient::class);
+
+        
     }
 }

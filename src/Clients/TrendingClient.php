@@ -40,8 +40,7 @@ class TrendingClient implements TrendingInterface
             $response = $response->getPsrResponse()->getBody()->getContents();
 
             $response = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
-
-
+            //todo maybe put here a way to merge all trending news from all sources
 
             return collect($response["data"]['response']);
 

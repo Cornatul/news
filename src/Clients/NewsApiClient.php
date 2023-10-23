@@ -49,7 +49,7 @@ class NewsApiClient implements NewsInterface
     //generate the headlines request
     public function headlines(string $topic): Collection
     {
-        $dataArray = [];
+        $dataArray = collect();
 
         try {
 
@@ -58,7 +58,7 @@ class NewsApiClient implements NewsInterface
             $response = $newsApiConnector->send(new HeadlinesRequest($topic));
 
             $response->collect('articles')->each(function ($article) use (&$dataArray) {
-                $dataArray[] = NewsDTO::from($article);
+                $dataArray->push(NewsDTO::from($article));
             });
 
 

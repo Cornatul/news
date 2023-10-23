@@ -5,7 +5,7 @@ namespace Cornatul\News\Connectors;
 use Illuminate\Support\Facades\Config;
 use Saloon\Http\Connector;
 
-class NewsApiConnector extends Connector
+class   NewsApiConnector extends Connector
 {
     public function resolveBaseUrl(): string
     {

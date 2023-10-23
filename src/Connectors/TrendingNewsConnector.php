@@ -9,7 +9,7 @@ class TrendingNewsConnector extends Connector
 {
     public function resolveBaseUrl(): string
     {
-        return 'https:/v1.nlpapi.org/';
+        return config('news.news-api-url');
     }
 
     protected function defaultHeaders(): array
@@ -20,11 +20,4 @@ class TrendingNewsConnector extends Connector
         ];
     }
 
-    protected function defaultQuery(): array
-    {
-        return [
-            'apiKey' => config('news.news-api-key'),
-        ];
-
-    }
 }

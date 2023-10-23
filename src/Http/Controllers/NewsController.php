@@ -4,10 +4,11 @@ namespace Cornatul\News\Http\Controllers;
 
 use Cornatul\Feeds\Classes\Parser;
 use Cornatul\Feeds\DTO\FeedDto;
-use Cornatul\Feeds\Interfaces\FeedFinderInterface;
+use Cornatul\Feeds\Contracts\FeedFinderInterface;
 use Cornatul\Feeds\Jobs\FeedExtractor;
 use Cornatul\Feeds\Jobs\FeedImporter;
 use Cornatul\Feeds\Models\Feed;
+use Cornatul\News\Interfaces\GoogleInterface;
 use Cornatul\News\Interfaces\NewsInterface;
 use Cornatul\News\Interfaces\TrendingInterface;
 use Illuminate\Contracts\Foundation\Application;
@@ -28,18 +29,23 @@ class NewsController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected NewsInterface $news;
 
-    public function __construct()
+    protected GoogleInterface $google;
+
+    public function __construct(NewsInterface $news, GoogleInterface $google)
     {
         $this->middleware('auth');
+        $this->news = $news;
+        $this->google = $google;
     }
 
-    public function index(NewsInterface $news, TrendingInterface $trending, string $topic = "business"): ViewContract
+
+    public function index(string $topic): ViewContract
     {
-        $news_api = $news->headlines($topic);
+        $google_news = $this->google->getNews($topic);
 
-        $google_news = $trending->find($topic);
-
+        dd($google_news);
 
         return view('news::index', compact('news_api', 'google_news','topic'));
     }

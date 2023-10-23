@@ -4,7 +4,7 @@ namespace Cornatul\News\Requests;
 
 /**
  *
- * @author Firstname Lastname <https://github.com/cornatul>
+ * @author Stefan aka Cornatul <https://github.com/cornatul>
  * @package Cornatul\News
  * @license MIT
  * @link https://github.com/cornatul/news#
