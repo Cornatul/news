@@ -10,6 +10,7 @@ use Cornatul\Feeds\Jobs\FeedImporter;
 use Cornatul\Feeds\Models\Feed;
 use Cornatul\News\Interfaces\GoogleInterface;
 use Cornatul\News\Interfaces\NewsInterface;
+use Cornatul\News\Interfaces\RedditInterface;
 use Cornatul\News\Interfaces\TrendingInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -33,19 +34,26 @@ class NewsController extends Controller
 
     protected GoogleInterface $google;
 
-    public function __construct(NewsInterface $news, GoogleInterface $google)
+    protected RedditInterface $reddit;
+
+    public function __construct(NewsInterface $news, GoogleInterface $google, RedditInterface $reddit)
     {
         $this->middleware('auth');
         $this->news = $news;
         $this->google = $google;
+        $this->reddit = $reddit;
     }
 
 
-    public function index(string $topic): ViewContract
+    public final function index(string $topic = "business"): ViewContract
     {
         $google_news = $this->google->getNews($topic);
 
-        dd($google_news);
+        $google_trends = $this->google->getTrends();
+
+        $reddit_news = $this->reddit->getHot();
+
+        dd($google_news, $reddit_news, $google_trends);
 
         return view('news::index', compact('news_api', 'google_news','topic'));
     }

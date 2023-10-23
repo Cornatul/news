@@ -27,7 +27,8 @@
         "illuminate/support": ">=9.0.0",
         "spatie/laravel-data": ">=3.0.0",
         "sammyjo20/saloon-cache-plugin": "^2.0",
-        "sammyjo20/saloon-laravel": "^2.0"
+        "sammyjo20/saloon-laravel": "^2.0",
+        "ext-simplexml": "*"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",

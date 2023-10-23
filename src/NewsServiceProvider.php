@@ -2,8 +2,12 @@
 
 namespace Cornatul\News;
 
+use Cornatul\News\Clients\GoogleClient;
 use Cornatul\News\Clients\NewsApiClient;
+use Cornatul\News\Clients\RedditClient;
 use Cornatul\News\Clients\TrendingClient;
+use Cornatul\News\Interfaces\GoogleInterface;
+use Cornatul\News\Interfaces\RedditInterface;
 use Cornatul\News\Interfaces\TrendingInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -35,6 +39,10 @@ class NewsServiceProvider extends ServiceProvider
         $this->app->bind(NewsInterface::class, NewsApiClient::class);
         $this->app->bind(TrendingInterface::class, TrendingClient::class);
 
-        
+        $this->app->bind(GoogleInterface::class, GoogleClient::class);
+        $this->app->bind(RedditInterface::class, RedditClient::class);
+
+
+
     }
 }
