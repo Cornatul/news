@@ -4,16 +4,11 @@ namespace Cornatul\News\Interfaces;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @todo Remove this implementation
+ */
 interface TrendingInterface
 {
-    public function find(string $topic): Collection;
+    public function getTrends(): Collection;
 
-    /**
-     * @method getTrendingKeywords
-     */
-    public function getNewsTrendingKeywords(): Collection;
-
-    public function getGGoogleTrendingKeywords(): Collection;
-
-    public function getTwitterTrendingKeywords(): Collection;
 }

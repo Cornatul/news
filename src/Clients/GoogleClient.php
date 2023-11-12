@@ -35,6 +35,7 @@ class GoogleClient implements GoogleInterface
      * @throws InvalidResponseClassException
      * @throws PendingRequestException
      * @throws \Exception
+     * //todo replace the collection with a dto
      */
     public final function getNews(string $keyword, string $language = "en_gb"):GoogleNewsCollection
     {

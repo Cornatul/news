@@ -2,28 +2,42 @@
 
 namespace Cornatul\News\Collections;
 
+use Cornatul\News\Interfaces\OutputInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Collection;
 
-class GoogleNewsCollection extends Collection
+
+/**
+ * @todo implement this to output interface
+ */
+class GoogleNewsCollection extends BaseCollections implements OutputInterface
 {
+    private string $title;
+
+    private string $description;
+
+    private string $link;
+
+
     public function __construct($items = [])
     {
         parent::__construct($items);
     }
 
-    public function toArray()
+
+    public function getTitle(): string
     {
-        return $this->map(function($item){
-            return [
-                'title' => $item->title,
-                'description' => $item->description,
-                'url' => $item->url,
-                'image' => $item->image,
-                'published_at' => $item->published_at,
-                'source' => $item->source,
-            ];
-        })->toArray();
+        // TODO: Implement getTitle() method.
+    }
+
+    public function getDescription(): string
+    {
+        // TODO: Implement getDescription() method.
+    }
+
+    public function getLink(): string
+    {
+        // TODO: Implement getLink() method.
     }
 }
