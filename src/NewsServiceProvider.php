@@ -2,18 +2,12 @@
 
 namespace Cornatul\News;
 
+use Cornatul\Feeds\Console\ArticleExtractorCommand;
+use Cornatul\Feeds\Console\FeedEntriesExtractor;
 use Cornatul\News\Clients\GoogleClient;
-use Cornatul\News\Clients\NewsApiClient;
-use Cornatul\News\Clients\NineGangClient;
-use Cornatul\News\Clients\RedditClient;
-use Cornatul\News\Clients\TrendingClient;
-use Cornatul\News\Clients\TwitterClient;
-use Cornatul\News\Commands\RedditHotCommand;
-use Cornatul\News\Interfaces\GoogleInterface;
-use Cornatul\News\Interfaces\NineGangInterface;
-use Cornatul\News\Interfaces\RedditInterface;
+use Cornatul\News\Clients\NewsClient;
+use Cornatul\News\Console\NewsExtractorCommand;
 use Cornatul\News\Interfaces\TrendingInterface;
-use Cornatul\News\Interfaces\TwitterInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +30,9 @@ class NewsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'news');
 
+        $this->commands([
+            NewsExtractorCommand::class
+        ]);
     }
 
     final public function register(): void
@@ -43,6 +40,7 @@ class NewsServiceProvider extends ServiceProvider
         $this->app->bind(ClientInterface::class, Client::class);
         $this->app->bind(TrendingInterface::class, TrendingClient::class);
         //commands
+
 
     }
 }

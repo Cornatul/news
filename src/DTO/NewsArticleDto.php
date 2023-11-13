@@ -11,7 +11,7 @@ use stdClass;
 
 /**
  * @package Cornau\Feeds\DTO
- * @class ArticleDto
+ * @class NewsArticleDto
  *
  */
 class NewsArticleDto extends Data

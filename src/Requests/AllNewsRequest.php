@@ -34,7 +34,7 @@ class AllNewsRequest extends Request implements Cacheable
             'sortBy' => 'publishedAt',
             'apiKey' => config('news.news-api-key'),
             'language' => 'en',
-            'from' => Carbon::now()->subDays(7)->format('Y-m-d'),
+            'from' => Carbon::now()->subDays(1)->format('Y-m-d'),
         ];
     }
 
